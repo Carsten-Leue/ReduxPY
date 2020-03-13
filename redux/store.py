@@ -1,116 +1,159 @@
+from typing import Any, Callable, Mapping, Optional, Sequence, List, Dict
+
+from rx import merge, never
+from rx.core.typing import Observable
+from rx.operators import (
+    distinct,
+    do_action,
+    filter,
+    flat_map,
+    map,
+    scan,
+    share,
+    take_until,
+)
 from rx.subject import BehaviorSubject, Subject
-from rx.scheduler import TrampolineScheduler
-from rx import Observable, never, merge
-from rx.operators import map, distinct, share, take_until, filter, scan, flat_map, observe_on
 
-class ActionTypes(object):
-    INIT = '@@redux/INIT',
-    INIT_FEATURE: '@@redux/INIT_FEATURE'
+from .action import create_action
+from .constants import INIT_ACTION
+from .epic import run_epic
+from .reducer import combine_reducers
+from .types import (
+    Action,
+    Epic,
+    Reducer,
+    ReduxFeatureModule,
+    ReduxRootState,
+    ReduxRootStore,
+)
 
-class ReduxRootStoreDict(dict):
-    def as_observable(self) -> Observable:
-        return self['as_observable']()
-    def dispatch(self, action):
-        return self['dispatch'](action)
-    def add_feature_module(self, module):
-        return self['add_feature_module'](module)
+init_feature_action = create_action(INIT_ACTION)
 
-def init_feature_action(id: str):
-    return {'type': ActionTypes.INIT_FEATURE, 'payload': id}
+select_id: Callable[[ReduxFeatureModule], str] = lambda module: module[0]
+select_dependencies: Callable[
+    [ReduxFeatureModule], Sequence[ReduxFeatureModule]
+] = lambda module: module[3]
+select_reducer: Callable[[ReduxFeatureModule], Reducer] = lambda module: module[1]
+select_epic: Callable[[ReduxFeatureModule], Epic] = lambda module: module[2]
 
-select_id = lambda module: module.get('id')
-select_reducer = lambda module: module.get('reducer')
-select_epic = lambda module: module.get('epic')
+has_reducer: Callable[[ReduxFeatureModule], bool] = lambda module: bool(
+    select_reducer(module)
+)
 
-has_reducer = lambda module: 'reducer' in module
-has_epic = lambda module: 'epic' in module
+is_never = lambda x: False
 
-is_never = lambda: False
 
-def combine_reducers(reducers: dict): 
-    pass
+identity_reducer: Reducer = lambda state, action: state
 
-def noop_reducer(state, action):
-    return state
 
-def create_store(initial_state=None) -> ReduxRootStoreDict:
+def create_store(initial_state: Optional[ReduxRootState] = {}) -> ReduxRootStore:
+    """ Constructs a new store that can handle feature modules. 
+    
+        Args:
+            initial_state: optional initial state of the store, will typically be the empty dict
+
+        Returns:
+            An implementation of the store
+    """
+
     # current reducer
-    reducer = noop_reducer
+    reducer: List[Reducer] = [identity_reducer]
 
-    def replace_reducer(new_reducer):
-        reducer = new_reducer
+    def replace_reducer(new_reducer: Reducer) -> None:
+        reducer[0] = new_reducer
+
+    actions = Subject()
+
+    actions_ = actions.pipe(
+        do_action(lambda a: print("dispatching %s" % (str(a)))), share()
+    )
+
+    def _dispatch(action: Action) -> None:
+        actions.on_next(action)
 
     state = BehaviorSubject(initial_state)
 
-    # shutdown trigger in case we need it some time
+    # shutdown trigger
     done_ = Subject()
 
     # The set of known modules, to avoid cycles and duplicate registration
-    modules = {}
+    modules: Dict[str, ReduxFeatureModule] = {}
 
     # Sequence of added modules
-    module_subject = Subject();
-    
+    module_subject = Subject()
+
     # Subscribe to the resolved modules
-    module_ = module_subject.pipe(
-        distinct(select_id),
-        share()
-    ) 
+    module_ = module_subject.pipe(distinct(select_id), share())
 
     # Build the reducers
     reducer_ = module_.pipe(
         filter(has_reducer),
-        scan(lambda all, module: {**all, select_id(module) : select_reducer(module)}),
-        map(combine_reducers)
+        scan(
+            lambda all, module: {**all, select_id(module): select_reducer(module)}, {}
+        ),
+        map(combine_reducers),
+        map(replace_reducer),
     )
 
     # Build the epic
-    epic_ = module_.pipe(
-        filter(has_epic),
-        map(select_epic)
-    )
+    epic_ = module_.pipe(map(select_epic), filter(bool))
 
     # Root epic that combines all of the incoming epics
-    def root_epic(action_: Observable) -> Observable: 
-        return epic_.pipe(  
-            flat_map(lambda epic: epic(action_))
-        )
-
-    # changes in the set of reducers
-    reducer_added_ = reducer_.pipe(
-        map(replace_reducer)
+    root_epic: Epic = lambda action_, state_: epic_.pipe(
+        flat_map(run_epic(action_, state_)), map(_dispatch),
     )
 
     # notifications about new feature states
     new_module_ = module_.pipe(
-        map(select_id),
-        map(init_feature_action),
-        observe_on(TrampolineScheduler),
-        map(dispatch)
+        map(select_id), map(init_feature_action), map(_dispatch),
     )
 
-    # all state
-    internal_ = merge(reducer_added_, new_module_).pipe(filter(is_never))
+    def _add_feature_module(module: ReduxFeatureModule):
+        """ Registers a new feature module """
+        module_id = select_id(module)
+        if not module_id in modules:
+            modules[module_id] = module
+            for dep in select_dependencies(module):
+                _add_feature_module(dep)
+            module_subject.on_next(module)
 
-    actions_ = Subject()
-       
-    def dispatch(action):
-        actions_.on_next()
+    #: all state
+    internal_ = merge(root_epic(actions_, state), reducer_, new_module_).pipe(
+        filter(is_never)
+    )
 
-    def as_observable() -> Observable:
+    def _as_observable() -> Observable:
         return state
 
-    def add_feature_module(module):
-        pass
+    _on_next = _dispatch
+    _on_complete = lambda: done_.on_next(None)
 
-    merge(root_epic(actions_), actions_).pipe(
-        map(lambda action: reducer(state.value, action))
+    merge(actions_, internal_).pipe(
+        map(lambda action: reducer[0](state.value, action)), take_until(done_),
     ).subscribe(state)
 
-    dispatch({'type': ActionTypes.INIT})        
+    class ReduxRootStoreImpl(ReduxRootStore):
+        """ Implementation of the ReduxRootStore. We use the class
+            only as an interface and dispatch to the closure for
+            all implementation
+        """
 
-    return ReduxRootStoreDict(
-        dispatch=dispatch,
-        add_feature_module=add_feature_module,
-        as_observable=as_observable
-    )
+        def dispatch(self, action: Action) -> Action:
+            return _dispatch(action)
+
+        def as_observable(self) -> Observable[ReduxRootState]:
+            return _as_observable()
+
+        def on_next(self, value: Action) -> None:
+            _on_next(value)
+
+        def on_completed(self) -> None:
+            _on_complete()
+
+        def on_error(self, error) -> None:
+            pass
+
+        def add_feature_module(self, module: ReduxFeatureModule) -> None:
+            _add_feature_module(module)
+
+    return ReduxRootStoreImpl()
