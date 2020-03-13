@@ -7,3 +7,10 @@ install:
   - pip install tox-travis
 script:
   - tox
+deploy:
+  provider: pypi
+  skip_existing: true
+  user: '__token__'
+  password: '$PYPI_TOKEN'
+  on:
+    tags: true
