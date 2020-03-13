@@ -1,17 +1,19 @@
+from rx import Observable, pipe
+from rx.operators import do_action, filter, map
+
 from redux import (
-    Reducer,
-    create_action,
-    select_action_payload,
     Epic,
-    of_type,
-    of_init_feature,
+    Reducer,
+    ReduxFeatureModule,
     combine_epics,
+    create_action,
     create_feature_module,
     handle_actions,
+    of_init_feature,
+    of_type,
+    select_action_payload,
     select_feature,
 )
-from rx import Observable, pipe
-from rx.operators import filter, do_action, map
 
 INIT_FEATURE = "INIT_FEATURE"
 
@@ -35,6 +37,8 @@ init_epic: Epic = lambda action_, state_: action_.pipe(
 
 sample_epic: Epic = combine_epics(add_epic, init_epic)
 
-init_feature_module = create_feature_module(INIT_FEATURE, sample_reducer, sample_epic)
+init_feature_module: ReduxFeatureModule = create_feature_module(
+    INIT_FEATURE, sample_reducer, sample_epic
+)
 
 select_init_feature_module = select_feature(INIT_FEATURE)
