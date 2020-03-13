@@ -14,6 +14,13 @@
       "command": "pytest",
       "options": { "cwd": "${workspaceFolder}" },
       "args": ["-s"]
+    },
+    {
+      "label": "BumpVersion",
+      "type": "shell",
+      "command": "bumpversion",
+      "options": { "cwd": "${workspaceFolder}" },
+      "args": ["patch"]
     }
   ]
 }
