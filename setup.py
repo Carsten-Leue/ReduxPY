@@ -13,7 +13,7 @@ with open(join(HERE, "README.md")) as fid:
 # This call to setup() does all the work
 setup(
     name="redux-py",
-    version="0.0.1",
+    version="0.0.0",
     description="Redux implementation for Python",
     long_description=README,
     long_description_content_type="text/markdown",
@@ -27,8 +27,6 @@ setup(
     ],
     packages=find_packages(exclude=("tests",)),
     include_package_data=True,
-    install_requires=[
-        "rx"
-    ],
+    install_requires=["rx"],
     entry_points={"console_scripts": ["reduxpy=redux.__main__:main"]},
 )
