@@ -20,26 +20,26 @@ from redux import (
 
 INIT_FEATURE = "INIT_FEATURE"
 
-ADD_SAMPLE_ACTION = "ADD_SAMPLE_ACTION"
+ADD_INIT_ACTION = "ADD_INIT_ACTION"
 
-add_sample_action = create_action(ADD_SAMPLE_ACTION)
+add_init_action = create_action(ADD_INIT_ACTION)
 select_init_feature_module = select_feature(INIT_FEATURE)
 
 
-def create_sample_feature() -> ReduxFeatureModule:
+def create_init_feature() -> ReduxFeatureModule:
     """
         Constructs a new sample feature
     """
 
-    def handle_sample_action(state: Any, action: Action) -> Any:
+    def handle_init_action(state: Any, action: Action) -> Any:
         return select_action_payload(action)
 
-    sample_reducer = handle_actions({ADD_SAMPLE_ACTION: handle_sample_action})
+    sample_reducer = handle_actions({ADD_INIT_ACTION: handle_init_action})
 
-    add_epic = pipe(of_type(ADD_SAMPLE_ACTION), ignore_elements(),)
+    add_epic = pipe(of_type(ADD_INIT_ACTION), ignore_elements(),)
 
     init_epic = pipe(
-        of_init_feature(INIT_FEATURE), map(lambda x: add_sample_action("init")),
+        of_init_feature(INIT_FEATURE), map(lambda x: add_init_action("init")),
     )
 
     sample_epic = combine_epics(add_epic, init_epic)

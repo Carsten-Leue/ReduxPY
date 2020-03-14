@@ -1,12 +1,12 @@
 import unittest
 from unittest import TestCase
 from os.path import dirname
-from redux import create_store, create_action, select_feature, ReduxRootStore
+from redux import create_store, create_action, select_feature, ReduxRootStore, select
 from rx.operators import map, first, filter
 from rx.subject import Subject
 from rx import Observable
 from rx.core.typing import Observer
-from .init.feature import create_sample_feature, select_init_feature_module
+from .init.feature import create_init_feature, select_init_feature_module
 
 # Current directory
 HERE = dirname(__file__)
@@ -31,14 +31,14 @@ class TestReduxStore(TestCase):
         store_ = store.as_observable()
 
         init_state_ = store_.pipe(
-            map(select_init_feature_module), filter(bool), first()
+            select(select_init_feature_module), filter(bool), first()
         )
 
         test_ = init_state_.pipe(
             map(lambda state: self.assertEqual(state, "init")), first(),
         )
 
-        store.add_feature_module(create_sample_feature())
+        store.add_feature_module(create_init_feature())
 
         test_.subscribe()
 

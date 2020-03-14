@@ -9,3 +9,4 @@ from .reducer import handle_actions
 from .feature import of_init_feature, create_feature_module, select_feature
 from .epic import combine_epics
 from .types import Action, Reducer, Epic, ReduxRootStore, ReduxFeatureModule, StateType
+from .selectors import select
