@@ -1,42 +1,88 @@
-from typing import Any, Callable, Mapping, Optional, Sequence, Tuple
+"""
+    Implements feature specific functions
+"""
+
+from typing import Any, Callable, Optional, Sequence
 
 from rx import pipe
 from rx.core.typing import Observable
-from rx.operators import do_action, filter, map, take
+from rx.operators import filter, map, take
 
-from .action import select_action_payload, select_action_type
+from .action import is_by_selector, is_type, select_action_payload
 from .constants import INIT_ACTION
-from .types import Action, Epic, Reducer, StateType, ReduxFeatureModule
+from .types import Action, Epic, Reducer, StateType, ReduxFeatureModule, ReduxRootState
 
-is_init_feature_action: Callable[[Action], bool] = lambda action: (
-    select_action_type(action) is INIT_ACTION
-)
 
 def has_payload(payload: Any) -> Callable[[Action], bool]:
-    """ Tests if the action payload matches the given payload """
-    return lambda action: select_action_payload(action) is payload
+    """ Returns a function that checks if the action has a particular payload
+
+        Args:
+            payload: payload to test against
+
+        Returns:
+            Function to execute the check against an action    
+    """
+
+    return is_by_selector(payload, select_action_payload)
 
 
-def of_init_feature(id: str) -> Callable[[Observable[Action]], Observable[str]]:
-    """ Operator to test for the initialization action of a feature """
-    is_payload = has_payload(id)
+def of_init_feature(identifier: str) -> Callable[[Observable[Action]], Observable[str]]:
+    """ Operator to test for the initialization action of a feature 
+
+        Args:
+            identifier: the identifier of the feature
+
+        Returns:
+            Operator function that accepts init actions for the feature, once
+    
+    """
+    is_payload = has_payload(identifier)
     return pipe(
-        filter(is_init_feature_action), filter(is_payload), take(1), map(lambda x: id)
+        filter(is_type(INIT_ACTION)),
+        filter(is_payload),
+        take(1),
+        map(lambda x: identifier),
     )
 
 
 def create_feature_module(
-    id: str,
+    identifier: str,
     reducer: Reducer = None,
     epic: Epic = None,
-    dependencies: Sequence[ReduxFeatureModule] = [],
+    dependencies: Sequence[ReduxFeatureModule] = (),
 ) -> ReduxFeatureModule:
-    """ Constructs a new feature module descriptor """
-    return (id, reducer, epic, dependencies)
+    """ Constructs a new feature module descriptor 
+
+        Args:
+            identifier: the identifier of the feature
+            reducer: optional reducer
+            epic: optional epic
+            dependencies: optional dependencies on other features
+
+        Returns:
+            The feature module descriptor
+    
+    """
+    return (identifier, reducer, epic, dependencies)
 
 
 def select_feature(
-    id: str, initial_state: StateType = None
-) -> Callable[[Mapping[str, StateType]], Optional[StateType]]:
-    """ Selects a feature state """
-    return lambda state: state.get(id, initial_state)
+    identifier: str, initial_state: Optional[StateType] = None
+) -> Callable[[ReduxRootState], Optional[StateType]]:
+    """ Returns a function that returns the feature state from the root state
+
+        Args:
+            identifier: identifier of the feature
+            initial_state: fallback state used if the feature state is not defined
+
+        Returns:
+            The selector function
+    
+    """
+
+    def select_feature_by_id(state: ReduxRootState) -> Optional[StateType]:
+        """ Selector function that selects the feature state from the root state
+        """
+        return state.get(identifier, initial_state)
+
+    return select_feature_by_id

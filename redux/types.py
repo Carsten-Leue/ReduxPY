@@ -1,17 +1,21 @@
+"""
+    Type definitions
+"""
+
 from abc import ABC, abstractmethod
-from typing import Any, Callable, Mapping, Sequence, Tuple, TypeVar
+from typing import Callable, Mapping, Sequence, Tuple, TypeVar
 
 from rx.core.typing import Observable, Observer
 
-ReduxRootState = Mapping[str, Any]
+StateType = TypeVar("StateType")
 
 PayloadType = TypeVar("PayloadType")
+
+ReduxRootState = Mapping[str, StateType]
 
 Action = Tuple[str, PayloadType]
 
 Epic = Callable[[Observable[Action], Observable[ReduxRootState]], Observable[Action]]
-
-StateType = TypeVar("StateType")
 
 Reducer = Callable[[StateType, Action[PayloadType]], StateType]
 

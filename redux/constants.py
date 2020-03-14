@@ -1,1 +1,5 @@
-INIT_ACTION = '@@ReduxPy/init'
+"""
+    Some constant definitions
+"""
+
+INIT_ACTION = "@@ReduxPy/init"

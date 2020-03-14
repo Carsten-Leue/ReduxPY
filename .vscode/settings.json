@@ -7,5 +7,6 @@
   "python.linting.enabled": true,
   "python.linting.pylintEnabled": true,
   "python.formatting.provider": "black",
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "python.linting.pylintArgs": ["--enable=W0614"]
 }

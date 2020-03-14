@@ -42,3 +42,4 @@ init_feature_module: ReduxFeatureModule = create_feature_module(
 )
 
 select_init_feature_module = select_feature(INIT_FEATURE)
+
