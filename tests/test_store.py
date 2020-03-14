@@ -6,7 +6,7 @@ from rx.operators import map, first, filter
 from rx.subject import Subject
 from rx import Observable
 from rx.core.typing import Observer
-from .init.feature import init_feature_module, select_init_feature_module, sample_epic
+from .init.feature import create_sample_feature, select_init_feature_module
 
 # Current directory
 HERE = dirname(__file__)
@@ -38,7 +38,7 @@ class TestReduxStore(TestCase):
             map(lambda state: self.assertEqual(state, "init")), first(),
         )
 
-        store.add_feature_module(init_feature_module)
+        store.add_feature_module(create_sample_feature())
 
         test_.subscribe()
 

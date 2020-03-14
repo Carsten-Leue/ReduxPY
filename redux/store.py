@@ -11,6 +11,7 @@ from rx.operators import (
     do_action,
     filter,
     flat_map,
+    ignore_elements,
     map,
     scan,
     share,
@@ -94,18 +95,6 @@ def has_reducer(module: ReduxFeatureModule) -> bool:
 
     """
     return bool(select_reducer(module))
-
-
-def is_never(ignored: Any) -> bool:
-    """ Callback function that always returns false
-
-        Args:
-            ignored: the ignore input value
-
-        Returns:
-            False
-    """
-    return False
 
 
 def identity_reducer(state: StateType, action: Action) -> Action:
@@ -228,7 +217,7 @@ def create_store(initial_state: Optional[ReduxRootState] = {}) -> ReduxRootStore
 
     # all state
     internal_ = merge(root_epic(actions_, state), reducer_, new_module_).pipe(
-        filter(is_never)
+        ignore_elements()
     )
 
     def _as_observable() -> Observable[ReduxRootState]:

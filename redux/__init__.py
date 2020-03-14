@@ -8,4 +8,4 @@ from .action import create_action, select_action_payload, of_type
 from .reducer import handle_actions
 from .feature import of_init_feature, create_feature_module, select_feature
 from .epic import combine_epics
-from .types import Action, Reducer, Epic, ReduxRootStore, ReduxFeatureModule
+from .types import Action, Reducer, Epic, ReduxRootStore, ReduxFeatureModule, StateType

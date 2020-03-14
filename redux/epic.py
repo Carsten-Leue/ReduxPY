@@ -37,7 +37,6 @@ def run_epic(
                 the resulting obserable
         """
         count = len(getfullargspec(epic)[0])
-        print("Argument count %d" % count)
         return epic(*args[:count])
 
     return dispatch
