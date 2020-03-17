@@ -45,7 +45,7 @@ def select_id(module: ReduxFeatureModule) -> str:
         Returns:
             The module identifier
     """
-    return module[0]
+    return module.id
 
 
 def select_dependencies(module: ReduxFeatureModule) -> Sequence[ReduxFeatureModule]:
@@ -57,7 +57,7 @@ def select_dependencies(module: ReduxFeatureModule) -> Sequence[ReduxFeatureModu
         Returns:
             The module dependencies
     """
-    return module[3]
+    return module.dependencies
 
 
 def select_reducer(module: ReduxFeatureModule) -> Optional[Reducer]:
@@ -69,7 +69,7 @@ def select_reducer(module: ReduxFeatureModule) -> Optional[Reducer]:
         Returns:
             The module reducer
     """
-    return module[1]
+    return module.reducer
 
 
 def select_epic(module: ReduxFeatureModule) -> Optional[Epic]:
@@ -81,7 +81,7 @@ def select_epic(module: ReduxFeatureModule) -> Optional[Epic]:
         Returns:
             The module epic
     """
-    return module[2]
+    return module.epic
 
 
 def has_reducer(module: ReduxFeatureModule) -> bool:
@@ -228,7 +228,7 @@ def create_store(initial_state: Optional[ReduxRootState] = {}) -> ReduxRootStore
         """
         return state
 
-    def _on_complete() -> None:
+    def _on_completed() -> None:
         """ Triggers the done event """
         done_.on_next(None)
 
@@ -236,28 +236,7 @@ def create_store(initial_state: Optional[ReduxRootState] = {}) -> ReduxRootStore
         map(lambda action: reducer(state.value, action)), take_until(done_),
     ).subscribe(state)
 
-    class ReduxRootStoreImpl(ReduxRootStore):
-        """ Implementation of the ReduxRootStore. We use the class
-            only as an interface and dispatch to the closure for
-            all implementation
-        """
+    return ReduxRootStore(
+        _as_observable, _dispatch, _add_feature_module, _dispatch, _on_completed
+    )
 
-        def dispatch(self, action: Action) -> Action:
-            return _dispatch(action)
-
-        def as_observable(self) -> Observable[ReduxRootState]:
-            return _as_observable()
-
-        def on_next(self, value: Action) -> None:
-            _dispatch(value)
-
-        def on_completed(self) -> None:
-            _on_complete()
-
-        def on_error(self, error) -> None:
-            state.on_error(error)
-
-        def add_feature_module(self, module: ReduxFeatureModule) -> None:
-            _add_feature_module(module)
-
-    return ReduxRootStoreImpl()

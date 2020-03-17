@@ -21,7 +21,6 @@ class TestReduxStore(TestCase):
         store = create_store()
 
         self.assertIsInstance(store, ReduxRootStore)
-        self.assertIsInstance(store, Observer)
 
         store.on_completed()
 

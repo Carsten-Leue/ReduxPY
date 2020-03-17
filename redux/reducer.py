@@ -36,9 +36,8 @@ def default_reducer(initial_state: Optional[StateType]) -> Reducer:
 
 
 def handle_actions(
-    action_map: Mapping[str, Reducer[StateType, PayloadType]],
-    initial_state: Optional[StateType] = None,
-) -> Reducer[StateType, PayloadType]:
+    action_map: Mapping[str, Reducer], initial_state: Optional[StateType] = None,
+) -> Reducer:
 
     """ Creates a new reducer from a mapping of action name to reducer for that action. 
 

@@ -63,7 +63,7 @@ def create_feature_module(
             The feature module descriptor
     
     """
-    return (identifier, reducer, epic, dependencies)
+    return ReduxFeatureModule(identifier, reducer, epic, dependencies)
 
 
 def select_feature(

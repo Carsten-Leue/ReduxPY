@@ -10,7 +10,7 @@ from rx.operators import filter
 from .types import Action, PayloadType
 
 
-def create_action(type_name: str) -> Callable[[PayloadType], Action[PayloadType]]:
+def create_action(type_name: str) -> Callable[[PayloadType], Action]:
     """ Creates a function that produces an action of the given type
 
         Args:
@@ -20,7 +20,7 @@ def create_action(type_name: str) -> Callable[[PayloadType], Action[PayloadType]
             A function that accepts the action payload and creates the action
     """
 
-    def make_action(payload: PayloadType) -> Action[PayloadType]:
+    def make_action(payload: PayloadType) -> Action:
         """ Curried function that constructs the final action 
 
             Args:   
@@ -30,7 +30,7 @@ def create_action(type_name: str) -> Callable[[PayloadType], Action[PayloadType]
                 The action object
         
         """
-        return (type_name, payload)
+        return Action(type_name, payload)
 
     return make_action
 
@@ -44,10 +44,10 @@ def select_action_type(action: Action) -> str:
         Returns:
             the type of the action
     """
-    return action[0]
+    return action.type
 
 
-def select_action_payload(action: Action[PayloadType]) -> PayloadType:
+def select_action_payload(action: Action) -> PayloadType:
     """ Selects the payload from the action 
     
         Args:
@@ -56,7 +56,7 @@ def select_action_payload(action: Action[PayloadType]) -> PayloadType:
         Returns:
             the payload of the action
     """
-    return action[1]
+    return action.payload
 
 
 def is_by_selector(
