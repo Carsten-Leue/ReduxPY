@@ -1,7 +1,7 @@
 """ Module doc """
 
 # Version of ReduxPy package
-__version__ = "0.0.3"
+__version__ = "0.1.0"
 
 from .store import create_store
 from .action import create_action, select_action_payload, of_type
