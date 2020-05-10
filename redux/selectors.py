@@ -5,7 +5,7 @@ from operator import is_
 from typing import Callable, TypeVar
 
 from rx import pipe
-from rx.core.typing import Observable
+from rx import Observable
 from rx.operators import distinct_until_changed, map, multicast, ref_count
 from rx.subject import ReplaySubject
 
@@ -15,7 +15,7 @@ Mapper = Callable[[T1], T2]
 
 
 def select(selector: Mapper[T1, T2]
-           ) -> Callable[[Observable[T1]], Observable[T2]]:
+           ) -> Callable[[Observable], Observable]:
     """ Reactive operator that applies a selector
         and shares the result across multiple subscribers
 

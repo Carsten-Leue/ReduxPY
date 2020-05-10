@@ -6,14 +6,14 @@ from inspect import getfullargspec
 from typing import Callable, Iterable
 
 from rx import merge
-from rx.core.typing import Observable
+from rx import Observable
 
 from .types import Action, Epic, ReduxRootState
 
 
 def run_epic(
-    action_: Observable[Action], state_: Observable[ReduxRootState]
-) -> Callable[[Epic], Observable[ReduxRootState]]:
+    action_: Observable, state_: Observable
+) -> Callable[[Epic], Observable]:
     """ Runs a single epic agains the given action and state observables
 
         Args:
@@ -25,7 +25,7 @@ def run_epic(
     """
     args = (action_, state_)
 
-    def dispatch(epic: Epic) -> Observable[ReduxRootState]:
+    def dispatch(epic: Epic) -> Observable:
         """ Dispatches to an epic. This method supports epics that
             only use a single action_ observable to support creating
             epics directly from a pipe.
@@ -53,7 +53,7 @@ def combine_epics(*epics: Iterable[Epic]) -> Epic:
     """
 
     def dispatch(
-        action_: Observable[Action], state_: Observable[ReduxRootState]
+        action_: Observable, state_: Observable
     ) -> Epic:
         """ Merges the epics into one
 

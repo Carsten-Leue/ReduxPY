@@ -5,7 +5,7 @@
 from typing import Iterable, Mapping, MutableMapping, Optional, cast
 
 from rx import merge
-from rx.core.typing import Observable
+from rx import Observable
 from rx.operators import (
     distinct,
     filter,
@@ -185,8 +185,8 @@ def create_store(
 
     # Root epic that combines all of the incoming epics
     def root_epic(
-        action_: Observable[Action], state_: Observable[ReduxRootState]
-    ) -> Observable[ReduxRootState]:
+        action_: Observable, state_: Observable
+    ) -> Observable:
         """ Implementation of the root epic. If listens for new epics
             to come in and automatically subscribes.
 
@@ -223,7 +223,7 @@ def create_store(
         ignore_elements()
     )
 
-    def _as_observable() -> Observable[ReduxRootState]:
+    def _as_observable() -> Observable:
         """ Returns the state as an observable
 
             Returns:

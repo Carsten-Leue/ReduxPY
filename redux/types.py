@@ -13,7 +13,7 @@ from typing import (
     TypeVar,
 )
 
-from rx.core.typing import Observable
+from rx import Observable
 
 StateType = TypeVar("StateType")
 
@@ -28,9 +28,9 @@ class Action(NamedTuple, Generic[PayloadType]):
     payload: PayloadType
 
 
-Epic = Callable[[Observable[Action],
-                 Observable[ReduxRootState]],
-                Observable[Action]]
+Epic = Callable[[Observable,
+                 Observable],
+                Observable]
 
 Reducer = Callable[[StateType, Action], StateType]
 
@@ -52,7 +52,7 @@ class ReduxRootStore(NamedTuple):
     """ Implementation of a store that manages sub-state as features. Features are added
         to the store automatically, when required by the select method.
     """
-    as_observable: Callable[[], Observable[ReduxRootState]]
+    as_observable: Callable[[], Observable]
     dispatch: Callable[[Action], None]
     add_feature_module: Callable[[ReduxFeatureModule], None]
     on_next: Callable[[Action], None]

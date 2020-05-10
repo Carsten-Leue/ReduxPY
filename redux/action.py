@@ -4,7 +4,7 @@
 
 from typing import Any, Callable
 
-from rx.core.typing import Observable
+from rx import Observable
 from rx.operators import filter
 
 from .types import Action, PayloadType
@@ -102,7 +102,7 @@ def is_type(type_name) -> Callable[[Action], bool]:
 
 
 def of_type(
-        type_name: str) -> Callable[[Observable[Action]], Observable[Action]]:
+        type_name: str) -> Callable[[Observable], Observable]:
     """ Returns an rx operator that filters for actions of the given type
 
         Args:

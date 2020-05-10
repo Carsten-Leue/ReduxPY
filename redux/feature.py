@@ -5,7 +5,7 @@
 from typing import Any, Callable, Iterable, Optional
 
 from rx import pipe
-from rx.core.typing import Observable
+from rx import Observable
 from rx.operators import filter, map, take
 
 from .action import is_by_selector, is_type, select_action_payload
@@ -27,7 +27,7 @@ def has_payload(payload: Any) -> Callable[[Action], bool]:
 
 
 def of_init_feature(
-        identifier: str) -> Callable[[Observable[Action]], Observable[str]]:
+        identifier: str) -> Callable[[Observable], Observable]:
     """ Operator to test for the initialization action of a feature
 
         Args:
