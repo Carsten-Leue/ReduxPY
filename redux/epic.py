@@ -3,7 +3,7 @@
 """
 
 from inspect import getfullargspec
-from typing import Callable, Sequence
+from typing import Callable, Iterable
 
 from rx import merge
 from rx.core.typing import Observable
@@ -42,8 +42,8 @@ def run_epic(
     return dispatch
 
 
-def combine_epics(*epics: Sequence[Epic]) -> Epic:
-    """ Combines a sequence of epics into one single epic by merging them 
+def combine_epics(*epics: Iterable[Epic]) -> Epic:
+    """ Combines a sequence of epics into one single epic by merging them
 
         Args:
             epics: the epics to merge
@@ -60,7 +60,7 @@ def combine_epics(*epics: Sequence[Epic]) -> Epic:
             Args:
                 action_: the action observable
                 state_: the state observable
-            
+
             Returns:
                 the merged epic
         """

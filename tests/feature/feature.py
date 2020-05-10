@@ -41,4 +41,3 @@ def create_sample_feature() -> ReduxFeatureModule:
     sample_epic = combine_epics(add_epic)
 
     return create_feature_module(SAMPLE_FEATURE, sample_reducer, sample_epic)
-

@@ -2,7 +2,18 @@
     Type definitions
 """
 
-from typing import Callable, Mapping, Sequence, TypeVar, NamedTuple
+from typing import (
+    Any,
+    Callable,
+    Generic,
+    Iterable,
+    Mapping,
+    NamedTuple,
+    Optional,
+    Protocol,
+    Sequence,
+    TypeVar,
+)
 
 from rx.core.typing import Observable
 
@@ -12,25 +23,39 @@ PayloadType = TypeVar("PayloadType")
 
 ReduxRootState = Mapping[str, StateType]
 
-Action = NamedTuple("Action", [("type", str), ("payload", PayloadType)])
 
-Epic = Callable[[Observable[Action], Observable[ReduxRootState]], Observable[Action]]
+class Action(NamedTuple, Generic[PayloadType]):
+    """ Action implementation that takes a payload """
+    type: str
+    payload: PayloadType
+
+
+Epic = Callable[[Observable[Action],
+                 Observable[ReduxRootState]],
+                Observable[Action]]
 
 Reducer = Callable[[StateType, Action], StateType]
 
-ReduxFeatureModule = NamedTuple(
-    "ReduxFeatureModule",
-    [("id", str), ("reducer", Reducer), ("epic", Epic), ("dependencies", Sequence)],
-)
 
-ReduxRootStore = NamedTuple(
-    "ReduxRootStore",
-    [
-        ("as_observable", Callable[[], Observable[ReduxRootState]]),
-        ("dispatch", Callable[[Action], Action]),
-        ("add_feature_module", Callable[[ReduxFeatureModule], None]),
-        ("on_next", Callable[[Action], Action]),
-        ("on_completed", Callable[[], None]),
-    ],
-)
+class ReduxFeatureModule(NamedTuple, Generic[StateType]):
+    """ Defines the feature module. The ID identifies the section in the state and
+        is also used to globally discriminate features.
 
+        After instantiating a feature store the store will fire an initialization action
+        for that feature. Use `ofInitFeature` to register for these initialization actions.
+    """
+    id: str
+    reducer: Optional[Reducer[StateType]]
+    epic: Optional[Epic]
+    dependencies: Iterable[Any]
+
+
+class ReduxRootStore(NamedTuple):
+    """ Implementation of a store that manages sub-state as features. Features are added
+        to the store automatically, when required by the select method.
+    """
+    as_observable: Callable[[], Observable[ReduxRootState]]
+    dispatch: Callable[[Action], None]
+    add_feature_module: Callable[[ReduxFeatureModule], None]
+    on_next: Callable[[Action], None]
+    on_completed: Callable[[], None]

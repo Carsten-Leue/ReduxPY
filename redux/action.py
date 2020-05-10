@@ -21,14 +21,14 @@ def create_action(type_name: str) -> Callable[[PayloadType], Action]:
     """
 
     def make_action(payload: PayloadType) -> Action:
-        """ Curried function that constructs the final action 
+        """ Curried function that constructs the final action
 
-            Args:   
+            Args:
                 payload: payload of the action
 
             Returns:
                 The action object
-        
+
         """
         return Action(type_name, payload)
 
@@ -36,7 +36,7 @@ def create_action(type_name: str) -> Callable[[PayloadType], Action]:
 
 
 def select_action_type(action: Action) -> str:
-    """ Selects the type from the action 
+    """ Selects the type from the action
 
         Args:
             action: the action object
@@ -48,8 +48,8 @@ def select_action_type(action: Action) -> str:
 
 
 def select_action_payload(action: Action) -> PayloadType:
-    """ Selects the payload from the action 
-    
+    """ Selects the payload from the action
+
         Args:
             action: the action object
 
@@ -69,7 +69,7 @@ def is_by_selector(
             selector: the selector to use to extract the value from the action
 
         Returns:
-            Function to execute the check against an action    
+            Function to execute the check against an action
     """
 
     def check_by_selector(action: Action) -> bool:
@@ -89,24 +89,25 @@ def is_by_selector(
 
 
 def is_type(type_name) -> Callable[[Action], bool]:
-    """ Returns a function that checks if the action is of a particular type 
+    """ Returns a function that checks if the action is of a particular type
 
         Args:
             type_name: type of the action to check for
 
         Returns:
-            Function to execute the check against an action    
+            Function to execute the check against an action
     """
 
     return is_by_selector(type_name, select_action_type)
 
 
-def of_type(type_name: str) -> Callable[[Observable[Action]], Observable[Action]]:
+def of_type(
+        type_name: str) -> Callable[[Observable[Action]], Observable[Action]]:
     """ Returns an rx operator that filters for actions of the given type
 
         Args:
             type_name: type of the action to filter for
-        
+
         Returns:
             The filter operator function
     """

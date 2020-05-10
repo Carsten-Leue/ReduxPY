@@ -1,2 +1,4 @@
 pytest
 rx
+autopep8
+mypy

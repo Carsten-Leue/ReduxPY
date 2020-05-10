@@ -2,13 +2,12 @@
     Basic implementation of the store
 """
 
-from typing import Any, Callable, Dict, Mapping, Optional, Sequence
+from typing import Iterable, Mapping, MutableMapping, Optional, cast
 
 from rx import merge
 from rx.core.typing import Observable
 from rx.operators import (
     distinct,
-    do_action,
     filter,
     flat_map,
     ignore_elements,
@@ -33,27 +32,26 @@ from .types import (
     StateType,
 )
 
-init_feature_action = create_action(INIT_ACTION)
-
 
 def select_id(module: ReduxFeatureModule) -> str:
     """ Selects the ID from a module
 
         Args:
             module: the module
-        
+
         Returns:
             The module identifier
     """
     return module.id
 
 
-def select_dependencies(module: ReduxFeatureModule) -> Sequence[ReduxFeatureModule]:
+def select_dependencies(
+        module: ReduxFeatureModule) -> Iterable[ReduxFeatureModule]:
     """ Selects the dependencies from a module
 
         Args:
             module: the module
-        
+
         Returns:
             The module dependencies
     """
@@ -65,7 +63,7 @@ def select_reducer(module: ReduxFeatureModule) -> Optional[Reducer]:
 
         Args:
             module: the module
-        
+
         Returns:
             The module reducer
     """
@@ -77,7 +75,7 @@ def select_epic(module: ReduxFeatureModule) -> Optional[Epic]:
 
         Args:
             module: the module
-        
+
         Returns:
             The module epic
     """
@@ -116,12 +114,15 @@ def reduce_reducers(
             the reduced dictionary
 
     """
-    return {**dst, select_id(module): select_reducer(module)}
+    reducer: Optional[Reducer] = select_reducer(module)
+    return cast(Mapping[str, Reducer], {
+                **dst, select_id(module): reducer}) if reducer else dst
 
 
-def create_store(initial_state: Optional[ReduxRootState] = {}) -> ReduxRootStore:
-    """ Constructs a new store that can handle feature modules. 
-    
+def create_store(
+        initial_state: Optional[ReduxRootState] = None) -> ReduxRootStore:
+    """ Constructs a new store that can handle feature modules.
+
         Args:
             initial_state: optional initial state of the store, will typically be the empty dict
 
@@ -137,11 +138,12 @@ def create_store(initial_state: Optional[ReduxRootState] = {}) -> ReduxRootStore
 
             Args:
                 new_reducer: the new reducer
-        
+
         """
         nonlocal reducer
         reducer = new_reducer
 
+    # subject used to dispatch actions
     actions = Subject()
 
     # the shared action observable
@@ -155,13 +157,14 @@ def create_store(initial_state: Optional[ReduxRootState] = {}) -> ReduxRootStore
         """
         actions.on_next(action)
 
-    state = BehaviorSubject(initial_state)
+    # our current state
+    state = BehaviorSubject(initial_state if initial_state else {})
 
     # shutdown trigger
     done_ = Subject()
 
     # The set of known modules, to avoid cycles and duplicate registration
-    modules: Dict[str, ReduxFeatureModule] = {}
+    modules: MutableMapping[str, ReduxFeatureModule] = {}
 
     # Sequence of added modules
     module_subject = Subject()
@@ -190,7 +193,7 @@ def create_store(initial_state: Optional[ReduxRootState] = {}) -> ReduxRootStore
             Args:
                 action_: the action observable
                 state_: the state observable
-            
+
             Returns
                 The observable of resulting actions
         """
@@ -198,15 +201,15 @@ def create_store(initial_state: Optional[ReduxRootState] = {}) -> ReduxRootStore
 
     # notifications about new feature states
     new_module_ = module_.pipe(
-        map(select_id), map(init_feature_action), map(_dispatch),
+        map(select_id), map(create_action(INIT_ACTION)), map(_dispatch),
     )
 
     def _add_feature_module(module: ReduxFeatureModule):
-        """ Registers a new feature module 
+        """ Registers a new feature module
 
-            Args: 
+            Args:
                 module: the new feature module
-    
+
         """
         module_id = select_id(module)
         if not module_id in modules:
@@ -239,4 +242,3 @@ def create_store(initial_state: Optional[ReduxRootState] = {}) -> ReduxRootStore
     return ReduxRootStore(
         _as_observable, _dispatch, _add_feature_module, _dispatch, _on_completed
     )
-
