@@ -82,14 +82,14 @@ def combine_reducers(
     def combine(state: Mapping[str, StateType],
                 action: Action) -> Mapping[str, StateType]:
         """ Updates the state object from the reducer mappings. """
-        result = state
+        result = state if state else {}
         mutable: Optional[MutableMapping[str, StateType]] = None
         for key, value in items:
-            current = state.get(key)
+            current = result.get(key)
             updated = value(current, action)
             if not current is updated:
                 if not mutable:
-                    mutable = dict(state)
+                    mutable = dict(result)
                     result = mutable
                 mutable[key] = updated
         return result

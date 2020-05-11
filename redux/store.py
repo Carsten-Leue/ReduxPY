@@ -95,7 +95,7 @@ def has_reducer(module: ReduxFeatureModule) -> bool:
     return bool(select_reducer(module))
 
 
-def identity_reducer(state: StateType, action: Action) -> Action:
+def identity_reducer(state: StateType, action: Action) -> StateType:
     """ Reducer function that returns the original state
     """
     return state
