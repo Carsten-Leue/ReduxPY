@@ -1,0 +1,5 @@
+click
+sphinx
+sphinx_rtd_theme
+sphinx-autoapi
+sphinx-autodoc-typehints

@@ -2,6 +2,7 @@
     Implements feature specific functions
 """
 
+from logging import getLogger
 from typing import Any, Callable, Iterable, Optional
 
 import rx.operators as op
@@ -13,6 +14,8 @@ from .action import is_by_selector, is_type, select_action_payload
 from .constants import INIT_ACTION
 from .types import (Action, Epic, Reducer, ReduxFeatureModule, ReduxRootState,
                     StateType)
+
+logger = getLogger(__name__)
 
 
 def has_payload(payload: Any) -> Predicate[Action]:
@@ -44,6 +47,7 @@ def of_init_feature(
         op.filter(has_payload(identifier)),
         op.take(1),
         op.map(lambda x: identifier),
+        op.do_action(logger.debug)
     )
 
 

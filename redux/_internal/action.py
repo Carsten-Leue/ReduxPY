@@ -3,16 +3,16 @@
 """
 
 from functools import partial
-from typing import Any, Callable
+from typing import Any
 
 import rx.operators as op
 from rx.core import Observable
-from rx.core.typing import Predicate
+from rx.core.typing import Mapper, Predicate
 
 from .types import Action, PayloadType
 
 
-def create_action(type_name: str) -> Callable[[PayloadType], Action]:
+def create_action(type_name: str) -> Mapper[PayloadType, Action]:
     """ Creates a function that produces an action of the given type
 
         Args:
@@ -49,7 +49,7 @@ def select_action_payload(action: Action) -> PayloadType:
 
 
 def is_by_selector(
-    value: Any, selector: Callable[[Action], Any]
+    value: Any, selector: Mapper[Action, Any]
 ) -> Predicate[Action]:
     """ Returns a function that checks if the selector on an action equals a particular value
 
@@ -91,7 +91,7 @@ def is_type(type_name) -> Predicate[Action]:
 
 
 def of_type(
-        type_name: str) -> Callable[[Observable], Observable]:
+        type_name: str) -> Mapper[Observable, Observable]:
     """ Returns an rx operator that filters for actions of the given type
 
         Args:

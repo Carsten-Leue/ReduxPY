@@ -1,16 +1,8 @@
 """
     Type definitions
 """
-from typing import (
-    Any,
-    Callable,
-    Generic,
-    Iterable,
-    Mapping,
-    NamedTuple,
-    Optional,
-    TypeVar,
-)
+from typing import (Any, Callable, Iterable, Mapping, NamedTuple, Optional,
+                    TypeVar)
 
 from rx.core import Observable
 
@@ -27,8 +19,7 @@ class Action(NamedTuple):
     payload: Any
 
 
-Epic = Callable[[Observable,
-                 Observable],
+Epic = Callable[[Observable, Observable],
                 Observable]
 
 Reducer = Callable[[StateType, Action], StateType]
@@ -42,7 +33,7 @@ class ReduxFeatureModule(NamedTuple):
         for that feature. Use `ofInitFeature` to register for these initialization actions.
     """
     id: str
-    reducer: Optional[Reducer[StateType]]
+    reducer: Optional[Reducer]
     epic: Optional[Epic]
     dependencies: Iterable[Any]
 

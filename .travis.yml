@@ -1,16 +1,20 @@
 language: python
+cache: pip
 python:
+  - "3.6"
   - "3.7"
   - "3.8"
   - "3.9"
 install:
-  - pip install tox-travis
+  - python3 -m pip install tox-travis
 script:
-  - tox
+  - python3 -m tox
 deploy:
   provider: pypi
   skip_existing: true
   user: "__token__"
   password: "$PYPI_TOKEN"
+  skip_cleanup: true
+  distributions: "sdist bdist_wheel"
   on:
     tags: true

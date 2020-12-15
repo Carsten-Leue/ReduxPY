@@ -2,6 +2,7 @@
     Basic implementation of the store
 """
 
+from logging import getLogger
 from typing import Iterable, Mapping, MutableMapping, Optional, cast
 
 import rx.operators as op
@@ -11,12 +12,10 @@ from rx.subject import BehaviorSubject, Subject
 
 from .action import create_action
 from .constants import INIT_ACTION
-from .epic import run_epic
+from .epic import run_epic, normalize_epic
 from .reducer import combine_reducers
 from .types import (Action, Epic, Reducer, ReduxFeatureModule, ReduxRootState,
                     ReduxRootStore, StateType)
-
-from logging import getLogger
 
 logger = getLogger(__name__)
 
@@ -107,8 +106,7 @@ def reduce_reducers(
                 **dst, select_id(module): reducer}) if reducer else dst
 
 
-def create_store(
-        initial_state: Optional[ReduxRootState] = None) -> ReduxRootStore:
+def create_store(initial_state: Optional[ReduxRootState] = None) -> ReduxRootStore:  # pylint: disable=too-many-locals
     """ Constructs a new store that can handle feature modules.
 
         Args:
@@ -119,7 +117,7 @@ def create_store(
     """
 
     # current reducer
-    reducer = identity_reducer
+    reducer: Reducer = identity_reducer
 
     def replace_reducer(new_reducer: Reducer) -> None:
         """ Callback that replaces the current reducer
@@ -137,13 +135,7 @@ def create_store(
     # the shared action observable
     actions_ = actions.pipe(op.share())
 
-    def _dispatch(action: Action) -> None:
-        """ Dispatches an action to the store
-
-            Args:
-                action: the action to dispatch
-        """
-        actions.on_next(action)
+    _dispatch = actions.on_next
 
     # our current state
     state = BehaviorSubject(initial_state if initial_state else {})
@@ -171,7 +163,8 @@ def create_store(
     # Build the epic
     epic_ = module_.pipe(
         op.map(select_epic),
-        op.filter(bool)
+        op.filter(bool),
+        op.map(normalize_epic)
     )
 
     # Root epic that combines all of the incoming epics
@@ -188,7 +181,10 @@ def create_store(
             Returns
                 The observable of resulting actions
         """
-        return epic_.pipe(op.flat_map(run_epic(action_, state_)), op.map(_dispatch),)
+        return epic_.pipe(
+            op.flat_map(run_epic(action_, state_)),
+            op.map(_dispatch)
+        )
 
     # notifications about new feature states
     new_module_ = module_.pipe(

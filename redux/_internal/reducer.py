@@ -2,7 +2,7 @@
     Implements reducer related function
 """
 
-from typing import Mapping, MutableMapping, Optional, Set, Tuple
+from typing import Iterable, Mapping, MutableMapping, Optional, Tuple
 
 from .action import select_action_type
 from .types import Action, Reducer, StateType
@@ -19,7 +19,7 @@ def default_reducer(initial_state: Optional[StateType]) -> Reducer:
 
     """
 
-    def reducer(state: StateType, _: Action) -> Optional[StateType]:
+    def _reducer(state: StateType, _: Action) -> Optional[StateType]:
         """ Reducer that returns the state or the initial state
 
             Args:
@@ -32,7 +32,7 @@ def default_reducer(initial_state: Optional[StateType]) -> Reducer:
         """
         return state if state else initial_state
 
-    return reducer
+    return _reducer
 
 
 def handle_actions(
@@ -50,7 +50,7 @@ def handle_actions(
     """
     def_reducer = default_reducer(initial_state)
 
-    def reducer(state: StateType, action: Action) -> Optional[StateType]:
+    def _reducer(state: StateType, action: Action) -> Optional[StateType]:
         """ Applies the mapped reducer or returns the default state
 
             Args:
@@ -63,7 +63,7 @@ def handle_actions(
         return action_map.get(select_action_type(action),
                               def_reducer)(state, action)
 
-    return reducer
+    return _reducer
 
 
 def combine_reducers(
@@ -77,10 +77,10 @@ def combine_reducers(
             A reducer that dispatches actions against each of the mapped reducers
 
     """
-    items: Set[Tuple[str, Reducer]] = reducers.items()
+    items: Iterable[Tuple[str, Reducer]] = tuple(reducers.items())
 
-    def combine(state: Mapping[str, StateType],
-                action: Action) -> Mapping[str, StateType]:
+    def _combine(state: Mapping[str, StateType],
+                 action: Action) -> Mapping[str, StateType]:
         """ Updates the state object from the reducer mappings. """
         result = state if state else {}
         mutable: Optional[MutableMapping[str, StateType]] = None
@@ -94,4 +94,4 @@ def combine_reducers(
                 mutable[key] = updated
         return result
 
-    return combine
+    return _combine
