@@ -1,7 +1,6 @@
 """
     Type definitions
 """
-from __future__ import annotations
 from typing import (
     Any,
     Callable,
@@ -13,7 +12,7 @@ from typing import (
     TypeVar,
 )
 
-from rx import Observable
+from rx.core import Observable
 
 StateType = TypeVar("StateType")
 
@@ -22,10 +21,10 @@ PayloadType = TypeVar("PayloadType")
 ReduxRootState = Mapping[str, StateType]
 
 
-class Action(NamedTuple, Generic[PayloadType]):
+class Action(NamedTuple):
     """ Action implementation that takes a payload """
     type: str
-    payload: PayloadType
+    payload: Any
 
 
 Epic = Callable[[Observable,
@@ -35,7 +34,7 @@ Epic = Callable[[Observable,
 Reducer = Callable[[StateType, Action], StateType]
 
 
-class ReduxFeatureModule(NamedTuple, Generic[StateType]):
+class ReduxFeatureModule(NamedTuple):
     """ Defines the feature module. The ID identifies the section in the state and
         is also used to globally discriminate features.
 

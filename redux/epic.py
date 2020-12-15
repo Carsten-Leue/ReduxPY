@@ -6,7 +6,7 @@ from inspect import getfullargspec
 from typing import Callable, Iterable
 
 from rx import merge
-from rx import Observable
+from rx.core import Observable
 
 from .types import Action, Epic, ReduxRootState
 

@@ -2,7 +2,7 @@
     Implements reducer related function
 """
 
-from typing import Mapping, MutableMapping, Optional
+from typing import Mapping, MutableMapping, Optional, Set, Tuple
 
 from .action import select_action_type
 from .types import Action, Reducer, StateType
@@ -19,7 +19,7 @@ def default_reducer(initial_state: Optional[StateType]) -> Reducer:
 
     """
 
-    def reducer(state: StateType, action: Action) -> Optional[StateType]:
+    def reducer(state: StateType, _: Action) -> Optional[StateType]:
         """ Reducer that returns the state or the initial state
 
             Args:
@@ -77,7 +77,7 @@ def combine_reducers(
             A reducer that dispatches actions against each of the mapped reducers
 
     """
-    items = reducers.items()
+    items: Set[Tuple[str, Reducer]] = reducers.items()
 
     def combine(state: Mapping[str, StateType],
                 action: Action) -> Mapping[str, StateType]:

@@ -2,10 +2,12 @@
     Implements action specific functions
 """
 
+from functools import partial
 from typing import Any, Callable
 
-from rx import Observable
-from rx.operators import filter
+import rx.operators as op
+from rx.core import Observable
+from rx.core.typing import Predicate
 
 from .types import Action, PayloadType
 
@@ -19,20 +21,7 @@ def create_action(type_name: str) -> Callable[[PayloadType], Action]:
         Returns:
             A function that accepts the action payload and creates the action
     """
-
-    def make_action(payload: PayloadType) -> Action:
-        """ Curried function that constructs the final action
-
-            Args:
-                payload: payload of the action
-
-            Returns:
-                The action object
-
-        """
-        return Action(type_name, payload)
-
-    return make_action
+    return partial(Action, type_name)
 
 
 def select_action_type(action: Action) -> str:
@@ -61,7 +50,7 @@ def select_action_payload(action: Action) -> PayloadType:
 
 def is_by_selector(
     value: Any, selector: Callable[[Action], Any]
-) -> Callable[[Action], bool]:
+) -> Predicate[Action]:
     """ Returns a function that checks if the selector on an action equals a particular value
 
         Args:
@@ -88,7 +77,7 @@ def is_by_selector(
     return check_by_selector
 
 
-def is_type(type_name) -> Callable[[Action], bool]:
+def is_type(type_name) -> Predicate[Action]:
     """ Returns a function that checks if the action is of a particular type
 
         Args:
@@ -111,4 +100,4 @@ def of_type(
         Returns:
             The filter operator function
     """
-    return filter(is_type(type_name))
+    return op.filter(is_type(type_name))

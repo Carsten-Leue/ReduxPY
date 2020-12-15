@@ -4,33 +4,21 @@
 
 from typing import Iterable, Mapping, MutableMapping, Optional, cast
 
+import rx.operators as op
 from rx import merge
-from rx import Observable
-from rx.operators import (
-    distinct,
-    filter,
-    flat_map,
-    ignore_elements,
-    map,
-    scan,
-    share,
-    take_until,
-)
+from rx.core import Observable
 from rx.subject import BehaviorSubject, Subject
 
 from .action import create_action
 from .constants import INIT_ACTION
 from .epic import run_epic
 from .reducer import combine_reducers
-from .types import (
-    Action,
-    Epic,
-    Reducer,
-    ReduxFeatureModule,
-    ReduxRootState,
-    ReduxRootStore,
-    StateType,
-)
+from .types import (Action, Epic, Reducer, ReduxFeatureModule, ReduxRootState,
+                    ReduxRootStore, StateType)
+
+from logging import getLogger
+
+logger = getLogger(__name__)
 
 
 def select_id(module: ReduxFeatureModule) -> str:
@@ -95,7 +83,7 @@ def has_reducer(module: ReduxFeatureModule) -> bool:
     return bool(select_reducer(module))
 
 
-def identity_reducer(state: StateType, action: Action) -> StateType:
+def identity_reducer(state: StateType, _: Action) -> StateType:
     """ Reducer function that returns the original state
     """
     return state
@@ -147,7 +135,7 @@ def create_store(
     actions = Subject()
 
     # the shared action observable
-    actions_ = actions.pipe(share())
+    actions_ = actions.pipe(op.share())
 
     def _dispatch(action: Action) -> None:
         """ Dispatches an action to the store
@@ -170,18 +158,21 @@ def create_store(
     module_subject = Subject()
 
     # Subscribe to the resolved modules
-    module_ = module_subject.pipe(distinct(select_id), share())
+    module_ = module_subject.pipe(op.distinct(select_id), op.share())
 
     # Build the reducers
     reducer_ = module_.pipe(
-        filter(has_reducer),
-        scan(reduce_reducers, {}),
-        map(combine_reducers),
-        map(replace_reducer),
+        op.filter(has_reducer),
+        op.scan(reduce_reducers, {}),
+        op.map(combine_reducers),
+        op.map(replace_reducer),
     )
 
     # Build the epic
-    epic_ = module_.pipe(map(select_epic), filter(bool))
+    epic_ = module_.pipe(
+        op.map(select_epic),
+        op.filter(bool)
+    )
 
     # Root epic that combines all of the incoming epics
     def root_epic(
@@ -197,11 +188,13 @@ def create_store(
             Returns
                 The observable of resulting actions
         """
-        return epic_.pipe(flat_map(run_epic(action_, state_)), map(_dispatch),)
+        return epic_.pipe(op.flat_map(run_epic(action_, state_)), op.map(_dispatch),)
 
     # notifications about new feature states
     new_module_ = module_.pipe(
-        map(select_id), map(create_action(INIT_ACTION)), map(_dispatch),
+        op.map(select_id),
+        op.map(create_action(INIT_ACTION)),
+        op.map(_dispatch),
     )
 
     def _add_feature_module(module: ReduxFeatureModule):
@@ -220,7 +213,7 @@ def create_store(
 
     # all state
     internal_ = merge(root_epic(actions_, state), reducer_, new_module_).pipe(
-        ignore_elements()
+        op.ignore_elements()
     )
 
     def _as_observable() -> Observable:
@@ -236,8 +229,9 @@ def create_store(
         done_.on_next(None)
 
     merge(actions_, internal_).pipe(
-        map(lambda action: reducer(state.value, action)), take_until(done_),
-    ).subscribe(state)
+        op.map(lambda action: reducer(state.value, action)),
+        op.take_until(done_),
+    ).subscribe(state, logger.error)
 
     return ReduxRootStore(
         _as_observable, _dispatch, _add_feature_module, _dispatch, _on_completed

@@ -4,9 +4,9 @@
 from operator import is_
 from typing import Callable, TypeVar
 
+import rx.operators as op
 from rx import pipe
-from rx import Observable
-from rx.operators import distinct_until_changed, map, multicast, ref_count
+from rx.core import Observable
 from rx.subject import ReplaySubject
 
 T1 = TypeVar('T1')
@@ -26,8 +26,8 @@ def select(selector: Mapper[T1, T2]
             The reactive operator
     """
     return pipe(
-        map(selector),
-        distinct_until_changed(comparer=is_),
-        multicast(subject=ReplaySubject(1)),
-        ref_count(),
+        op.map(selector),
+        op.distinct_until_changed(comparer=is_),
+        op.multicast(subject=ReplaySubject(1)),
+        op.ref_count(),
     )

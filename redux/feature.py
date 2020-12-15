@@ -4,16 +4,18 @@
 
 from typing import Any, Callable, Iterable, Optional
 
+import rx.operators as op
 from rx import pipe
-from rx import Observable
-from rx.operators import filter, map, take
+from rx.core import Observable
+from rx.core.typing import Mapper, Predicate
 
 from .action import is_by_selector, is_type, select_action_payload
 from .constants import INIT_ACTION
-from .types import Action, Epic, Reducer, ReduxFeatureModule, ReduxRootState, StateType
+from .types import (Action, Epic, Reducer, ReduxFeatureModule, ReduxRootState,
+                    StateType)
 
 
-def has_payload(payload: Any) -> Callable[[Action], bool]:
+def has_payload(payload: Any) -> Predicate[Action]:
     """ Returns a function that checks if the action has a particular payload
 
         Args:
@@ -27,7 +29,7 @@ def has_payload(payload: Any) -> Callable[[Action], bool]:
 
 
 def of_init_feature(
-        identifier: str) -> Callable[[Observable], Observable]:
+        identifier: str) -> Mapper[Observable, Observable]:
     """ Operator to test for the initialization action of a feature
 
         Args:
@@ -37,12 +39,11 @@ def of_init_feature(
             Operator function that accepts init actions for the feature, once
 
     """
-    is_payload = has_payload(identifier)
     return pipe(
-        filter(is_type(INIT_ACTION)),
-        filter(is_payload),
-        take(1),
-        map(lambda x: identifier),
+        op.filter(is_type(INIT_ACTION)),
+        op.filter(has_payload(identifier)),
+        op.take(1),
+        op.map(lambda x: identifier),
     )
 
 
