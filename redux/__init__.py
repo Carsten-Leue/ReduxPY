@@ -1,7 +1,7 @@
 """ Module doc """
 
 # Version of ReduxPy package
-__version__ = "0.1.5"
+__version__ = "0.1.6"
 
 from typing import Tuple
 from ._internal.store import create_store
