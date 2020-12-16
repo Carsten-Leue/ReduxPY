@@ -6,8 +6,7 @@ from logging import getLogger
 from typing import Any, Callable, Iterable, Optional
 
 import rx.operators as op
-from rx import pipe
-from rx.core import Observable
+from rx import Observable, pipe
 from rx.core.typing import Mapper, Predicate
 
 from .action import is_by_selector, is_type, select_action_payload

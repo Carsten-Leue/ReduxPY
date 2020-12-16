@@ -1,10 +1,10 @@
 """
-    Type definitions
+    Module doc
 """
 from typing import (Any, Callable, Iterable, Mapping, NamedTuple, Optional,
                     TypeVar)
 
-from rx.core import Observable
+from rx import Observable
 
 StateType = TypeVar("StateType")
 

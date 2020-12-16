@@ -5,8 +5,7 @@ from operator import is_
 from typing import Callable, TypeVar
 
 import rx.operators as op
-from rx import pipe
-from rx.core import Observable
+from rx import Observable, pipe
 from rx.subject import ReplaySubject
 
 T1 = TypeVar('T1')

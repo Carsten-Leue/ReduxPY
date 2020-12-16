@@ -6,7 +6,7 @@ from functools import partial
 from typing import Any
 
 import rx.operators as op
-from rx.core import Observable
+from rx import Observable
 from rx.core.typing import Mapper, Predicate
 
 from .types import Action, PayloadType

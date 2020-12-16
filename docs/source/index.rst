@@ -14,3 +14,9 @@ Welcome to the ReduxPY documentation!
    :caption: Modules:
 
    modules
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Additional information:
+
+   introduction

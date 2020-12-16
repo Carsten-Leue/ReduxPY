@@ -6,13 +6,12 @@ from logging import getLogger
 from typing import Iterable, Mapping, MutableMapping, Optional, cast
 
 import rx.operators as op
-from rx import merge
-from rx.core import Observable
+from rx import Observable, merge
 from rx.subject import BehaviorSubject, Subject
 
 from .action import create_action
 from .constants import INIT_ACTION
-from .epic import run_epic, normalize_epic
+from .epic import normalize_epic, run_epic
 from .reducer import combine_reducers
 from .types import (Action, Epic, Reducer, ReduxFeatureModule, ReduxRootState,
                     ReduxRootStore, StateType)

@@ -1,4 +1,6 @@
-""" Module doc """
+"""
+    Implementation of a Redux store with support for adding feature modules, dynamically. The store exposes a reactive API based on `RxPY <https://pypi.org/project/Rx/>`_.
+"""
 
 # Version of ReduxPy package
 __version__ = "0.1.6"
