@@ -48,6 +48,20 @@ def select_action_payload(action: Action) -> PayloadType:
     return action.payload
 
 
+def _is_by_selector(value: Any, selector: Mapper[Action, Any], action: Action) -> bool:
+    """ Checks if selector on an action matches a value
+
+        Args:
+            action: the action object
+
+        Returns:
+            true if the selector result of the action matches, else false
+
+    """
+
+    return selector(action) is value
+
+
 def is_by_selector(
     value: Any, selector: Mapper[Action, Any]
 ) -> Predicate[Action]:
@@ -60,21 +74,7 @@ def is_by_selector(
         Returns:
             Function to execute the check against an action
     """
-
-    def check_by_selector(action: Action) -> bool:
-        """ Checks if selector on an action matches a value
-
-            Args:
-                action: the action object
-
-            Returns:
-                true if the selector result of the action matches, else false
-
-        """
-
-        return selector(action) is value
-
-    return check_by_selector
+    return partial(_is_by_selector, value, selector)
 
 
 def is_type(type_name) -> Predicate[Action]:
@@ -92,7 +92,7 @@ def is_type(type_name) -> Predicate[Action]:
 
 def of_type(
         type_name: str) -> Mapper[Observable, Observable]:
-    """ Returns an rx operator that filters for actions of the given type
+    """ Returns a reactive operator that filters for actions of the given type
 
         Args:
             type_name: type of the action to filter for

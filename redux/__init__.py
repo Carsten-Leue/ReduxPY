@@ -1,18 +1,22 @@
 """
-    Implementation of a Redux store with support for adding feature modules, dynamically. The store exposes a reactive API based on `RxPY <https://pypi.org/project/Rx/>`_.
+    Implementation of a Redux store with support for adding feature modules, dynamically.
+    The store exposes a reactive API based on `RxPY <https://pypi.org/project/Rx/>`_.
 """
 
 # Version of ReduxPy package
 __version__ = "0.1.7"
 
 from typing import Tuple
-from ._internal.store import create_store
-from ._internal.action import create_action, select_action_payload, of_type
-from ._internal.reducer import handle_actions, combine_reducers
-from ._internal.feature import of_init_feature, create_feature_module, select_feature
+
+from ._internal.action import create_action, of_type, select_action_payload
 from ._internal.epic import combine_epics
-from ._internal.types import Action, Reducer, Epic, ReduxRootStore, ReduxFeatureModule, StateType
+from ._internal.feature import (create_feature_module, of_init_feature,
+                                select_feature)
+from ._internal.reducer import combine_reducers, handle_actions
 from ._internal.selectors import select
+from ._internal.store import create_store
+from ._internal.types import (Action, Epic, Reducer, ReduxFeatureModule,
+                              ReduxRootStore, StateType)
 
 __all__: Tuple[str, ...] = (
     'Action',

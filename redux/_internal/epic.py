@@ -34,6 +34,10 @@ def normalize_epic(epic: Epic) -> Epic:
     return epic if count == 2 else cast(Epic, partial(_wrapped_epic, epic))
 
 
+def _run_epic(action_: Observable, state_: Observable, epic: Epic) -> Observable:
+    return epic(action_, state_)
+
+
 def run_epic(action_: Observable, state_: Observable) -> Mapper[Epic, Observable]:
     """ Runs a single epic agains the given action and state observables
 
@@ -48,10 +52,23 @@ def run_epic(action_: Observable, state_: Observable) -> Mapper[Epic, Observable
     assert isinstance(action_, Observable)
     assert isinstance(state_, Observable)
 
-    def _dispatch(epic: Epic) -> Observable:
-        return epic(action_, state_)
+    return partial(_run_epic, action_, state_)
 
-    return _dispatch
+
+def _combine_epics(
+    norm_epics: Iterable[Epic],
+    action_: Observable, state_: Observable
+) -> Observable:
+    """ Merges the epics into one
+
+        Args:
+            action_: the action observable
+            state_: the state observable
+
+        Returns:
+            the merged epic
+    """
+    return merge(*map(run_epic(action_, state_), norm_epics))
 
 
 def combine_epics(*epics: Iterable[Epic]) -> Epic:
@@ -63,20 +80,4 @@ def combine_epics(*epics: Iterable[Epic]) -> Epic:
         Returns:
             The merged epic
     """
-    norm_epics: Iterable[Epic] = tuple(map(normalize_epic, epics))
-
-    def _dispatch(
-        action_: Observable, state_: Observable
-    ) -> Observable:
-        """ Merges the epics into one
-
-            Args:
-                action_: the action observable
-                state_: the state observable
-
-            Returns:
-                the merged epic
-        """
-        return merge(*map(run_epic(action_, state_), norm_epics))
-
-    return _dispatch
+    return partial(_combine_epics, tuple(map(normalize_epic, epics)))

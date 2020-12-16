@@ -2,6 +2,7 @@
     Implements feature specific functions
 """
 
+from functools import partial
 from logging import getLogger
 from typing import Any, Callable, Iterable, Optional
 
@@ -71,6 +72,14 @@ def create_feature_module(
     return ReduxFeatureModule(identifier, reducer, epic, dependencies)
 
 
+def _select_feature_by_id(
+        identifier: str,
+        initial_state: Optional[StateType],
+        state: ReduxRootState) -> Optional[StateType]:
+    """ Selector function that selects the feature state from the root state"""
+    return state.get(identifier, initial_state)
+
+
 def select_feature(
     identifier: str, initial_state: Optional[StateType] = None
 ) -> Callable[[ReduxRootState], Optional[StateType]]:
@@ -84,10 +93,4 @@ def select_feature(
             The selector function
 
     """
-
-    def select_feature_by_id(state: ReduxRootState) -> Optional[StateType]:
-        """ Selector function that selects the feature state from the root state
-        """
-        return state.get(identifier, initial_state)
-
-    return select_feature_by_id
+    return partial(_select_feature_by_id, identifier, initial_state)
