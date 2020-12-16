@@ -25,7 +25,7 @@ def read_requirements(filename: str) -> Sequence[str]:
 # This call to setup() does all the work
 setup(
     name="redux-py",
-    version="0.1.8",
+    version="0.1.9",
     description="Redux implementation for Python",
     long_description=README,
     long_description_content_type="text/markdown",
