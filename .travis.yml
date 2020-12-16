@@ -10,11 +10,16 @@ install:
 script:
   - python3 -m tox
 deploy:
-  provider: pypi
-  skip_existing: true
-  user: "__token__"
-  password: "$PYPI_TOKEN"
-  skip_cleanup: true
-  distributions: "sdist bdist_wheel"
-  on:
-    tags: true
+  - provider: pypi
+    skip_existing: true
+    user: "__token__"
+    password: "$PYPI_TOKEN"
+    skip_cleanup: true
+    distributions: "sdist bdist_wheel"
+    on:
+      tags: true
+  - provider: pages:git
+    github_token: "$GITHUB_PAGES_TOKEN"
+    local_dir: build/docs
+    on:
+      tags: true
