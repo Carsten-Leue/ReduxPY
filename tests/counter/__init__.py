@@ -1,5 +1,5 @@
 # Version of ReduxPy package
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 
 from .feature import create_counter_feature, select_counter_feature
 from .action import DECREMENT_ACTION, INCREMENT_ACTION
