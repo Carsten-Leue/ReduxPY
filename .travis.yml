@@ -25,3 +25,4 @@ deploy:
     local_dir: build/docs
     on:
       tags: true
+      python: "3.8"
