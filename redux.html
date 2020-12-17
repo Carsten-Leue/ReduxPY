@@ -194,13 +194,25 @@ The store exposes a reactive API based on <a class="reference external" href="ht
 <dl class="py data">
 <dt id="redux.Epic">
 <code class="sig-prename descclassname">redux.</code><code class="sig-name descname">Epic</code><a class="headerlink" href="#redux.Epic" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of Callable[[rx.core.observable.observable.Observable, rx.core.observable.observable.Observable], rx.core.observable.observable.Observable]</p>
+<dd><p>The central part of internal API.</p>
+<p>This represents a generic version of type ‘origin’ with type arguments ‘params’.
+There are two kind of these aliases: user defined and special. The special ones
+are wrappers around builtin collections and ABCs in collections.abc. These must
+have ‘name’ always set. If ‘inst’ is False, then the alias can’t be instantiated,
+this is used by e.g. typing.List and typing.Dict.</p>
+<p>alias of Callable[[rx.core.observable.observable.Observable, rx.core.observable.observable.Observable], rx.core.observable.observable.Observable]</p>
 </dd></dl>
 
 <dl class="py data">
 <dt id="redux.Reducer">
 <code class="sig-prename descclassname">redux.</code><code class="sig-name descname">Reducer</code><a class="headerlink" href="#redux.Reducer" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of Callable[[StateType, redux._internal.types.Action], StateType]</p>
+<dd><p>The central part of internal API.</p>
+<p>This represents a generic version of type ‘origin’ with type arguments ‘params’.
+There are two kind of these aliases: user defined and special. The special ones
+are wrappers around builtin collections and ABCs in collections.abc. These must
+have ‘name’ always set. If ‘inst’ is False, then the alias can’t be instantiated,
+this is used by e.g. typing.List and typing.Dict.</p>
+<p>alias of Callable[[StateType, redux._internal.types.Action], StateType]</p>
 </dd></dl>
 
 <dl class="py class">
