@@ -1,0 +1,567 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Welcome to the ReduxPY documentation! &mdash; ReduxPy r1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="redux" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="#" class="icon icon-home" alt="Documentation Home"> ReduxPy
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Modules:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">redux</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Additional information:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">What is Redux and Why</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html#providing-a-feature-module">Providing a feature module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html#registering-a-feature-module">Registering a feature module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html#consuming-a-feature-module">Consuming a feature module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html#side-effects-in-feature-modules">Side effects in Feature Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">ReduxPy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Welcome to the ReduxPY documentation!</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-redux">
+<span id="welcome-to-the-reduxpy-documentation"></span><h1>Welcome to the ReduxPY documentation!<a class="headerlink" href="#module-redux" title="Permalink to this headline">¶</a></h1>
+<p>Implementation of a Redux store with support for adding feature modules, dynamically.
+The store exposes a reactive API based on <a class="reference external" href="https://pypi.org/project/Rx/">RxPY</a>.</p>
+<dl class="py class">
+<dt id="redux.Action">
+<em class="property">class </em><code class="sig-prename descclassname">redux.</code><code class="sig-name descname">Action</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">type</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">payload</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span><a class="headerlink" href="#redux.Action" title="Permalink to this definition">¶</a></dt>
+<dd><p>Action implementation that takes a payload</p>
+<dl class="py method">
+<dt id="redux.Action.payload">
+<em class="property">property </em><code class="sig-name descname">payload</code><a class="headerlink" href="#redux.Action.payload" title="Permalink to this definition">¶</a></dt>
+<dd><p>The action action payload</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="redux.Action.type">
+<em class="property">property </em><code class="sig-name descname">type</code><a class="headerlink" href="#redux.Action.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identifier for the action, must be globally unique.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt id="redux.Epic">
+<code class="sig-prename descclassname">redux.</code><code class="sig-name descname">Epic</code><a class="headerlink" href="#redux.Epic" title="Permalink to this definition">¶</a></dt>
+<dd><p>The central part of internal API.</p>
+<p>This represents a generic version of type ‘origin’ with type arguments ‘params’.
+There are two kind of these aliases: user defined and special. The special ones
+are wrappers around builtin collections and ABCs in collections.abc. These must
+have ‘name’ always set. If ‘inst’ is False, then the alias can’t be instantiated,
+this is used by e.g. typing.List and typing.Dict.</p>
+<p>alias of Callable[[rx.core.observable.observable.Observable, rx.core.observable.observable.Observable], rx.core.observable.observable.Observable]</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="redux.Reducer">
+<code class="sig-prename descclassname">redux.</code><code class="sig-name descname">Reducer</code><a class="headerlink" href="#redux.Reducer" title="Permalink to this definition">¶</a></dt>
+<dd><p>The central part of internal API.</p>
+<p>This represents a generic version of type ‘origin’ with type arguments ‘params’.
+There are two kind of these aliases: user defined and special. The special ones
+are wrappers around builtin collections and ABCs in collections.abc. These must
+have ‘name’ always set. If ‘inst’ is False, then the alias can’t be instantiated,
+this is used by e.g. typing.List and typing.Dict.</p>
+<p>alias of Callable[[StateType, redux._internal.types.Action], StateType]</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="redux.ReduxFeatureModule">
+<em class="property">class </em><code class="sig-prename descclassname">redux.</code><code class="sig-name descname">ReduxFeatureModule</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">reducer</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Callable<span class="p">[</span><span class="p">[</span>StateType<span class="p">, </span>redux._internal.types.Action<span class="p">]</span><span class="p">, </span>StateType<span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">epic</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Callable<span class="p">[</span><span class="p">[</span>rx.core.observable.observable.Observable<span class="p">, </span>rx.core.observable.observable.Observable<span class="p">]</span><span class="p">, </span>rx.core.observable.observable.Observable<span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">dependencies</span><span class="p">:</span> <span class="n">Iterable<span class="p">[</span><a class="reference internal" href="redux.html#redux.ReduxFeatureModule" title="redux.ReduxFeatureModule">ReduxFeatureModule</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#redux.ReduxFeatureModule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the feature module. The ID identifies the section in the state and
+is also used to globally discriminate features.</p>
+<p>After instantiating a feature store the store will fire an initialization action
+for that feature. Use <a class="reference internal" href="redux.html#redux.of_init_feature" title="redux.of_init_feature"><code class="xref py py-meth docutils literal notranslate"><span class="pre">of_init_feature()</span></code></a> to
+register for these initialization actions.</p>
+<dl class="py method">
+<dt id="redux.ReduxFeatureModule.dependencies">
+<em class="property">property </em><code class="sig-name descname">dependencies</code><a class="headerlink" href="#redux.ReduxFeatureModule.dependencies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dependencies on other feature modules</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="redux.ReduxFeatureModule.epic">
+<em class="property">property </em><code class="sig-name descname">epic</code><a class="headerlink" href="#redux.ReduxFeatureModule.epic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Epic that handles module specific asynchronous operations.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="redux.ReduxFeatureModule.id">
+<em class="property">property </em><code class="sig-name descname">id</code><a class="headerlink" href="#redux.ReduxFeatureModule.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identifier of the module, will also be used as a namespace into the state.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="redux.ReduxFeatureModule.reducer">
+<em class="property">property </em><code class="sig-name descname">reducer</code><a class="headerlink" href="#redux.ReduxFeatureModule.reducer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reducer that handles module specific actions.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="redux.ReduxRootStore">
+<em class="property">class </em><code class="sig-prename descclassname">redux.</code><code class="sig-name descname">ReduxRootStore</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">as_observable</span><span class="p">:</span> <span class="n">Callable<span class="p">[</span><span class="p">]</span><span class="p">, </span>rx.core.observable.observable.Observable<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">dispatch</span><span class="p">:</span> <span class="n">Callable<span class="p">[</span><span class="p">[</span>redux._internal.types.Action<span class="p">]</span><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">add_feature_module</span><span class="p">:</span> <span class="n">Callable<span class="p">[</span><span class="p">[</span>redux._internal.types.ReduxFeatureModule<span class="p">]</span><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">on_next</span><span class="p">:</span> <span class="n">Callable<span class="p">[</span><span class="p">[</span>redux._internal.types.Action<span class="p">]</span><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">on_completed</span><span class="p">:</span> <span class="n">Callable<span class="p">[</span><span class="p">]</span><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#redux.ReduxRootStore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implementation of a store that manages sub-state as features. Features are added
+to the store automatically, when required by the select method.</p>
+<dl class="py method">
+<dt id="redux.ReduxRootStore.add_feature_module">
+<em class="property">property </em><code class="sig-name descname">add_feature_module</code><a class="headerlink" href="#redux.ReduxRootStore.add_feature_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a new feature module</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="redux.ReduxRootStore.as_observable">
+<em class="property">property </em><code class="sig-name descname">as_observable</code><a class="headerlink" href="#redux.ReduxRootStore.as_observable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts the store to an observable of state emissions</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="redux.ReduxRootStore.dispatch">
+<em class="property">property </em><code class="sig-name descname">dispatch</code><a class="headerlink" href="#redux.ReduxRootStore.dispatch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dispatches a single action to the store</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="redux.ReduxRootStore.on_completed">
+<em class="property">property </em><code class="sig-name descname">on_completed</code><a class="headerlink" href="#redux.ReduxRootStore.on_completed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shuts down the store</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="redux.ReduxRootStore.on_next">
+<em class="property">property </em><code class="sig-name descname">on_next</code><a class="headerlink" href="#redux.ReduxRootStore.on_next" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for <a class="reference internal" href="redux.html#redux.ReduxRootStore.dispatch" title="redux.ReduxRootStore.dispatch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dispatch()</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="redux.combine_epics">
+<code class="sig-prename descclassname">redux.</code><code class="sig-name descname">combine_epics</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">epics</span></em><span class="sig-paren">)</span><a class="headerlink" href="#redux.combine_epics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combines a sequence of epics into one single epic by merging them</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>epics</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<code class="xref py py-class docutils literal notranslate"><span class="pre">Observable</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Observable</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">Observable</span></code>]]) – the epics to merge</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<code class="xref py py-class docutils literal notranslate"><span class="pre">Observable</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Observable</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">Observable</span></code>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The merged epic</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="redux.combine_reducers">
+<code class="sig-prename descclassname">redux.</code><code class="sig-name descname">combine_reducers</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">reducers</span></em><span class="sig-paren">)</span><a class="headerlink" href="#redux.combine_reducers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new reducer from a mapping of reducers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>reducers</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Mapping" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[~StateType, <code class="xref py py-class docutils literal notranslate"><span class="pre">Action</span></code>], ~StateType]]) – the mapping from state partition to reducer</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Mapping" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, ~StateType], <code class="xref py py-class docutils literal notranslate"><span class="pre">Action</span></code>], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Mapping" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, ~StateType]]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A reducer that dispatches actions against each of the mapped reducers</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="redux.create_action">
+<code class="sig-prename descclassname">redux.</code><code class="sig-name descname">create_action</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">type_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#redux.create_action" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a function that produces an action of the given type</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>type_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – type of the action</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[~PayloadType], <code class="xref py py-class docutils literal notranslate"><span class="pre">Action</span></code>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A function that accepts the action payload and creates the action</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="redux.create_feature_module">
+<code class="sig-prename descclassname">redux.</code><code class="sig-name descname">create_feature_module</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">identifier</span></em>, <em class="sig-param"><span class="n">reducer</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">epic</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dependencies</span><span class="o">=</span><span class="default_value">()</span></em><span class="sig-paren">)</span><a class="headerlink" href="#redux.create_feature_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructs a new feature module descriptor</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>identifier</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – the identifier of the feature</p></li>
+<li><p><strong>reducer</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[~StateType, <code class="xref py py-class docutils literal notranslate"><span class="pre">Action</span></code>], ~StateType]]) – optional reducer</p></li>
+<li><p><strong>epic</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<code class="xref py py-class docutils literal notranslate"><span class="pre">Observable</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Observable</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">Observable</span></code>]]) – optional epic</p></li>
+<li><p><strong>dependencies</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ReduxFeatureModule</span></code>]) – optional dependencies on other features</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ReduxFeatureModule</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The feature module descriptor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="redux.create_store">
+<code class="sig-prename descclassname">redux.</code><code class="sig-name descname">create_store</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">initial_state</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#redux.create_store" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructs a new store that can handle feature modules.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>initial_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Mapping" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, ~StateType]]) – optional initial state of the store, will typically be the empty dict</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ReduxRootStore</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>An implementation of the store</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="redux.handle_actions">
+<code class="sig-prename descclassname">redux.</code><code class="sig-name descname">handle_actions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">action_map</span></em>, <em class="sig-param"><span class="n">initial_state</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#redux.handle_actions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new reducer from a mapping of action name to reducer for that action.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>action_map</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Mapping" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[~StateType, <code class="xref py py-class docutils literal notranslate"><span class="pre">Action</span></code>], ~StateType]]) – mapping from action name to reducer for that action</p></li>
+<li><p><strong>initial_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[~StateType]) – optional initial state used if no reducer matches</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[~StateType, <code class="xref py py-class docutils literal notranslate"><span class="pre">Action</span></code>], ~StateType]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A reducer function that handles the actions in the map</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="redux.of_init_feature">
+<code class="sig-prename descclassname">redux.</code><code class="sig-name descname">of_init_feature</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">identifier</span></em><span class="sig-paren">)</span><a class="headerlink" href="#redux.of_init_feature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Operator to test for the initialization action of a feature</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>identifier</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – the identifier of the feature</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<code class="xref py py-class docutils literal notranslate"><span class="pre">Observable</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">Observable</span></code>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Operator function that accepts init actions for the feature, once</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="redux.of_type">
+<code class="sig-prename descclassname">redux.</code><code class="sig-name descname">of_type</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">type_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#redux.of_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a reactive operator that filters for actions of the given type</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>type_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – type of the action to filter for</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<code class="xref py py-class docutils literal notranslate"><span class="pre">Observable</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">Observable</span></code>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The filter operator function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="redux.select">
+<code class="sig-prename descclassname">redux.</code><code class="sig-name descname">select</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">selector</span></em><span class="sig-paren">)</span><a class="headerlink" href="#redux.select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reactive operator that applies a selector
+and shares the result across multiple subscribers</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>selector</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[~T1], ~T2]) – the selector function</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<code class="xref py py-class docutils literal notranslate"><span class="pre">Observable</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">Observable</span></code>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The reactive operator</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="redux.select_action_payload">
+<code class="sig-prename descclassname">redux.</code><code class="sig-name descname">select_action_payload</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">action</span></em><span class="sig-paren">)</span><a class="headerlink" href="#redux.select_action_payload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selects the payload from the action</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>action</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Action</span></code>) – the action object</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>~PayloadType</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the payload of the action</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="redux.select_feature">
+<code class="sig-prename descclassname">redux.</code><code class="sig-name descname">select_feature</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">identifier</span></em>, <em class="sig-param"><span class="n">initial_state</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#redux.select_feature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a function that returns the feature state from the root state</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>identifier</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – identifier of the feature</p></li>
+<li><p><strong>initial_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[~StateType]) – fallback state used if the feature state is not defined</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Mapping" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, ~StateType]], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[~StateType]]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The selector function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Modules:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">redux</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="redux.html">redux package</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Additional information:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">What is Redux and Why</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#the-state-tree">The State Tree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#actions">Actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#reducers">Reducers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#epics">Epics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#feature-module">Feature Module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html#providing-a-feature-module">Providing a feature module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#example">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html#registering-a-feature-module">Registering a feature module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html#consuming-a-feature-module">Consuming a feature module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#id1">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html#side-effects-in-feature-modules">Side effects in Feature Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#id2">Example</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="modules.html" class="btn btn-neutral float-right" title="redux" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Dr. Carsten Leue
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
